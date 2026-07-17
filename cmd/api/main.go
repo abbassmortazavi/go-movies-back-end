@@ -24,9 +24,9 @@ func main() {
 	//connect to the database
 	app.Domain = "example.com"
 	log.Println("Listening on port " + strconv.Itoa(port))
-	http.HandleFunc("/", Hello)
+
 	//start the webserver
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	err := http.ListenAndServe(fmt.Sprintf(":%d", port), app.routes())
 
 	if err != nil {
 		panic(err)
