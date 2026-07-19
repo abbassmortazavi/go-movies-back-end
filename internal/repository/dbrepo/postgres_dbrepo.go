@@ -49,3 +49,6 @@ func (p *PostgresDBRepo) Movies() ([]*models.Movie, error) {
 	}
 	return movies, nil
 }
+func (p *PostgresDBRepo) Connection() *sql.DB {
+	return p.DB
+}
