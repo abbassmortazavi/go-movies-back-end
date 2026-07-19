@@ -19,8 +19,8 @@ func (p *PostgresDBRepo) Movies() ([]*models.Movie, error) {
 	var movies []*models.Movie
 	query := `
 		select 
-			title, description, release_date,
-			runtime, mpa_rating, coalesce(image, ''),
+			id, title, description, release_date,
+			runtime, mpaa_rating, coalesce(image, ''),
 			created_at, updated_at
 		from
 		    movies
@@ -38,6 +38,7 @@ func (p *PostgresDBRepo) Movies() ([]*models.Movie, error) {
 			&movie.Description,
 			&movie.ReleaseDate,
 			&movie.Runtime,
+			&movie.MpaaRating,
 			&movie.Image,
 			&movie.CreatedAt,
 			&movie.UpdatedAt,
