@@ -8,7 +8,7 @@ type Movie struct {
 	Description string    `json:"description"`
 	ReleaseDate time.Time `json:"release_date"`
 	Runtime     int       `json:"runtime"`
-	MPARating   string    `json:"mparating"`
+	MpaaRating  string    `json:"mpaa_rating"`
 	Image       string    `json:"image"`
 	CreatedAt   time.Time `json:"-"`
 	UpdatedAt   time.Time `json:"-"`
