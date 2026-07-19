@@ -36,6 +36,7 @@ func main() {
 		log.Fatal(err)
 	}
 	app.DB = connection
+	defer app.DB.Close()
 	//start the webserver
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), app.routes())
 
