@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
@@ -15,24 +14,13 @@ func (app *application) Hello(w http.ResponseWriter, r *http.Request) {
 		Message: "Hello World",
 		Version: "1.0.0",
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	out, err := json.Marshal(payload)
-	if err != nil {
-		panic(err)
-	}
-	w.Write(out)
+	_ = app.writeJson(w, http.StatusOK, payload)
+
 }
 func (app *application) movies(w http.ResponseWriter, r *http.Request) {
 	res, err := app.DB.Movies()
 	if err != nil {
 		panic(err)
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	out, err := json.Marshal(res)
-	if err != nil {
-		panic(err)
-	}
-	w.Write(out)
+	_ = app.writeJson(w, http.StatusOK, res)
 }
