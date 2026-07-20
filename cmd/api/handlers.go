@@ -20,7 +20,8 @@ func (app *application) Hello(w http.ResponseWriter, r *http.Request) {
 func (app *application) movies(w http.ResponseWriter, r *http.Request) {
 	res, err := app.DB.Movies()
 	if err != nil {
-		panic(err)
+		app.errorJson(w, err)
+		return
 	}
 	_ = app.writeJson(w, http.StatusOK, res)
 }
