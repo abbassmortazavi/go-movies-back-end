@@ -3,6 +3,7 @@ package main
 import (
 	"backend/internal/repository"
 	"backend/internal/repository/dbrepo"
+	"backend/pkg"
 	"flag"
 	"fmt"
 	"log"
@@ -37,7 +38,7 @@ func main() {
 		log.Fatal(err)
 	}
 	app.DB = &dbrepo.PostgresDBRepo{DB: connection}
-	defer app.DB.Connection().Close()
+	defer pkg.GetDB().Close()
 	//start the webserver
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), app.routes())
 

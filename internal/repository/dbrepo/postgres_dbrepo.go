@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+var DB *sql.DB
+
 type PostgresDBRepo struct {
 	DB *sql.DB
 }
@@ -49,7 +51,4 @@ func (p *PostgresDBRepo) Movies() ([]*models.Movie, error) {
 		movies = append(movies, &movie)
 	}
 	return movies, nil
-}
-func (p *PostgresDBRepo) Connection() *sql.DB {
-	return p.DB
 }
