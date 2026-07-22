@@ -15,5 +15,6 @@ func (app *application) routes() http.Handler {
 
 	mux.Get("/", app.Hello)
 	mux.Get("/movies", app.movies)
+	mux.Get("/authenticate", app.authenticate)
 	return mux
 }
