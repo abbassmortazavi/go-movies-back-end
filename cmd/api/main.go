@@ -17,7 +17,8 @@ const port = 8080
 type application struct {
 	Domain       string
 	Dsn          string
-	DB           repository.Repository
+	Movie        repository.MovieRepository
+	User         repository.UserRepository
 	auth         Auth
 	JWTSecret    string
 	JWTIssuer    string
@@ -46,7 +47,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	app.DB = &dbrepo.PostgresDBRepo{DB: connection}
+	app.Movie = &dbrepo.PostgresDBRepo{DB: connection}
+	app.User = &dbrepo.PostgresDBRepo{DB: connection}
 	defer pkg.GetDB().Close()
 	app.auth = Auth{
 		Issuer:        app.JWTIssuer,

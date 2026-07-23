@@ -4,6 +4,6 @@ import (
 	"backend/internal/models"
 )
 
-type Repository interface {
+type MovieRepository interface {
 	Movies() ([]*models.Movie, error)
 }
