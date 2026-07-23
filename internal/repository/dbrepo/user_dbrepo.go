@@ -8,7 +8,7 @@ import (
 func (p *PostgresDBRepo) GetUserByEmail(email string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
-	query := `select users from users where email = $1`
+	query := `select * users from users where email = $1`
 	rows, err := p.DB.QueryContext(ctx, query, email)
 	if err != nil {
 		return nil, err
