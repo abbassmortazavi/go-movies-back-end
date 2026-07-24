@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"net/http"
 )
@@ -19,7 +20,7 @@ func (app *application) Hello(w http.ResponseWriter, r *http.Request) {
 
 }
 func (app *application) movies(w http.ResponseWriter, r *http.Request) {
-	res, err := app.DB.Movies()
+	res, err := app.Movie.Movies()
 	if err != nil {
 		app.errorJson(w, err)
 		return
@@ -29,16 +30,38 @@ func (app *application) movies(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	//read json payload
+	var payload struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+	err := app.readJson(w, r, &payload)
+	if err != nil {
+		app.errorJson(w, err, http.StatusBadRequest)
+		return
+	}
 
 	//validate user against database
+	user, err := app.User.GetUserByEmail(payload.Email)
+	if err != nil {
+		app.errorJson(w, err, http.StatusNotFound)
+		return
+	}
 
 	//check password
+	valid, err := user.PasswordMatches(payload.Password)
+	if err != nil || !valid {
+		err := app.errorJson(w, errors.New("invalid credentials"), http.StatusForbidden)
+		if err != nil {
+			return
+		}
+		return
+	}
 
 	//create jwt user
 	u := jwtUser{
-		ID:        1,
-		FirstName: "John",
-		LastName:  "Doe",
+		ID:        user.ID,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
 	}
 
 	//generate tokens
@@ -48,8 +71,11 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf("tokens: %v", tokens)
+	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
+	http.SetCookie(w, refreshCookie)
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(tokens.AccessToken))
+	err = app.writeJson(w, http.StatusOK, tokens)
+	if err != nil {
+		return
+	}
 }
