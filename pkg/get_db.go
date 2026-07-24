@@ -1,10 +1,11 @@
 package pkg
 
 import (
-	"backend/internal/repository/dbrepo"
 	"database/sql"
 )
 
+var DB *sql.DB
+
 func GetDB() *sql.DB {
-	return dbrepo.DB
+	return DB
 }

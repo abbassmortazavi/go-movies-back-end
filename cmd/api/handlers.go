@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 	"net/http"
 )
 
@@ -70,7 +69,7 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		app.errorJson(w, err)
 		return
 	}
-	log.Printf("tokens: %v", tokens)
+
 	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
 	http.SetCookie(w, refreshCookie)
 
